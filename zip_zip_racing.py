@@ -30,34 +30,11 @@ class ZipZipRacing:
         self._create_belt()
 
 
-
     def _create_belt(self):
-        """Make an asteroid belt"""
-        # Create an asteroid and find the number of asteroids in the column. 
-        # Spacing between each asteroid is equal to asteroid height plus a random amount of space. 
+        """Create a belt of asteroids."""
+        # Make an asteroid.
         asteroid = Asteroid(self)
-        asteroid_height, asteroid_width = asteroid.rect.size
-        available_space_y = self.settings.screen_height - asteroid_height
-        number_asteroids_y = available_space_y // asteroid_height
-
-        # Determine the number of columns of aliens that will fit on the screen
-        available_space_x = self.settings.screen_width
-        number_columns = available_space_x // asteroid_width
-        
-        # Create the full belt
-        for column_number in range(number_columns):
-            for asteroid_number in range(number_asteroids_y):
-                self._create_asteroid(asteroid_number, column_number)
-        
-    def _create_asteroid(self, asteroid_number, column_number):
-        """Create an asteroid and place it in the column."""
-        asteroid = Asteroid(self)
-        asteroid_height, asteroid_width = asteroid.rect.size
-        asteroid.y = asteroid_height + randint(5,15) * asteroid_height * asteroid_number
-        asteroid.rect.y = asteroid.y
-        asteroid.rect.x = asteroid_width + randint(5,15) * asteroid.rect.width * column_number
         self.asteroids.add(asteroid)
-
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -65,9 +42,22 @@ class ZipZipRacing:
             self._check_events()
             self.scooter.update()
             self._update_bullets()
+            self._update_asteroids()
             self._update_screen()
 
+    def _update_asteroids(self):
+        """Update the positions of the asteroids in the belt."""
+        self.asteroids.update()
 
+        # Get rid of asteroids that go off the screen 
+        for asteroid in self.asteroids.copy():
+            if asteroid.rect.x <= -5:
+                self.asteroids.remove(asteroid)
+        if not self.asteroids:
+            # Create a new asteroid and send it
+            self._create_belt()
+
+            
      
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets"""
@@ -128,7 +118,6 @@ class ZipZipRacing:
         for bullet in self.bullets.sprites():
             bullet.draw_bullets()
         self.asteroids.draw(self.screen)
-
         pygame.display.flip()
 
 if __name__ == '__main__':
