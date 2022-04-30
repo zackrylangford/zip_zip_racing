@@ -16,6 +16,10 @@ class Star(Sprite):
         self.image = pygame.image.load('images/yellowstar.bmp')
         self.rect = self.image.get_rect()
 
+        # Set star starting position
+        self.rect.x = 2550
+        self.rect.y = randint(50,400)
+
     def update(self):
         self.rect.x -= 1
         # If it goes off the left, move it back to the right.

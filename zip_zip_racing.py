@@ -11,6 +11,7 @@ from scooter import Scooter
 
 from bullet import Bullet
 
+from star import Star
 
 from asteroid import Asteroid
 
@@ -23,13 +24,14 @@ class ZipZipRacing:
         """Initialize the game, and create game resources."""
         pygame.init()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode((1200,800))
+        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Zip Zip Racing")
 
         # Create an instance to store game statistics.
         self.stats = GameStats(self)
+        self.star = Star(self)
 
         self.scooter = Scooter(self)
         self.bullets = pygame.sprite.Group()
@@ -41,6 +43,7 @@ class ZipZipRacing:
         while True:
             self._check_events()
             self.scooter.update()
+            self.star.update()
             self._update_bullets()
             self._update_asteroids()
             self._update_screen()
@@ -155,6 +158,7 @@ class ZipZipRacing:
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
         self.scooter.blitme()
+        self.star.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullets()
         self.asteroids.draw(self.screen)
