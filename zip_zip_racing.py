@@ -101,40 +101,24 @@ class ZipZipRacing:
             if bullet.rect.x >= self.settings.screen_width:
                 self.bullets.remove(bullet)
 
-        # Check for bullets that have hit asteroids
-        # If so, get rid of the bullet and the asteroid.
+        # Check for bullets that have hit stars
+        # if so, get rid of bullet and star
+
         collisions = pygame.sprite.groupcollide(
-            self.bullets, self.asteroids, True, True) 
+            self.bullets, self.stars, True, True
+        )
 
-    def _update_asteroids(self):
-        """Update the positions of the asteroids in the belt."""
-        self.asteroids.update()
-        # Get rid of asteroids that go off the screen 
-        for asteroid in self.asteroids.copy():
-            if asteroid.rect.x <= -5:
-                self.asteroids.remove(asteroid)
-        if not self.asteroids:
-        # Create a new asteroid and send it
-            self._create_belt()
+        collisions = pygame.sprite.groupcollide(
+            self.bullets, self.asteroids, True, True
+        )
 
-        # Decrement amount of asteroids left in level
-        self.stats.asteroids_left -= 1
 
-        if pygame.sprite.spritecollideany(self.scooter, self.asteroids):
-            self._scooter_hit()
 
-    def _create_belt(self):
-        """Create a belt of asteroids."""
-        # Make an asteroid.
-        asteroid = Asteroid(self)
-        asteroid.x = 2550
-        asteroid.rect.x = asteroid.x
-        asteroid.rect.y = randint (25,1200)
-        self.asteroids.add(asteroid)
-        self.asteroids.update()
 
     def _update_stars(self):
         self.stars.update()
+
+
 
     def _create_sky(self):
         """Create 10 stars and store them in a group"""
@@ -149,6 +133,26 @@ class ZipZipRacing:
                 star.y = randint (25,1300)
                 star.rect.y = star.y
                 self.stars.add(star)
+
+    def _update_asteroids(self):
+        self.asteroids.update()
+    
+    def _create_belt(self):
+        """Create 2 asteroids and store them in a group"""
+        number_asteroids = 2
+
+        # Create asteroids at random intervals off the right of the screen
+        # and then send them back if they go off the left of screen
+        for asteroid_number in range(number_asteroids):
+            # Create the asteroid
+                asteroid = Asteroid(self)
+                asteroid.x = randint(2550,20000)
+                asteroid.rect.x = asteroid.x
+                asteroid.y = randint (50,1300)
+                asteroid.rect.y = asteroid.y
+                self.asteroids.add(asteroid)
+ 
+
 
   
 
@@ -171,10 +175,6 @@ class ZipZipRacing:
         sleep(0.5)
 
      
-
-
-
- 
 
 
     def _update_screen(self):
