@@ -118,6 +118,11 @@ class ZipZipRacing:
     def _update_stars(self):
         self.stars.update()
 
+        # Look for scooter and star collisions.
+
+        if pygame.sprite.spritecollideany(self.scooter, self.stars):
+            self._scooter_hit()
+
 
 
     def _create_sky(self):
@@ -130,12 +135,23 @@ class ZipZipRacing:
                 star = Star(self)
                 star.x = randint(2550,20000)
                 star.rect.x = star.x
-                star.y = randint (25,1300)
+                star.y = randint (50,1300)
                 star.rect.y = star.y
                 self.stars.add(star)
 
     def _update_asteroids(self):
         self.asteroids.update()
+
+        # If asteroid goes off the left, remove it
+        for asteroid in self.asteroids.copy(): 
+            if asteroid.rect.x < -500:
+                self.asteroids.remove(asteroid)
+
+        # Check for asteroid and scooter collisions
+        
+        if pygame.sprite.spritecollideany(self.scooter, self.asteroids):
+            self._scooter_hit()
+
     
     def _create_belt(self):
         """Create 2 asteroids and store them in a group"""
@@ -158,18 +174,20 @@ class ZipZipRacing:
 
 
     def _scooter_hit(self):
-        """Respond to the ship being hit by an alien."""
+        """Respond to the ship being hit by an asteroid or star."""
 
         # Decrement scooters_left.
         self.stats.scooters_left -= 1
 
-        # Get rid of any remaining aliens and bullets.
+        # Get rid of any remaining asteroids and bullets.
         self.asteroids.empty()
+        self.stars.empty()
         self.bullets.empty()
 
         # Create a new fleet and center the ship.
         self._create_belt()
         self.scooter.center_scooter()
+        self._create_sky()
 
         # Pause
         sleep(0.5)

@@ -19,9 +19,7 @@ class Asteroid(Sprite):
 
     def update(self):
         self.rect.x -= 2
-        # If it goes off the left, move it back to the right.
-        if self.rect.x < -500:
-            self.rect.x = randint(2550,10000)
+
 
     def draw_stars(self):
         """Draw the asteroids to the screen."""
