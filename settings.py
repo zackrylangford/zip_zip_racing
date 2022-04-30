@@ -25,7 +25,7 @@ class Settings:
         self.bullets_allowed = 2
 
         # Asteroid settings
-        self.asteroid_speed = 1 
+        self.asteroid_speed = 1.1
         self.amount_asteroids_level = 10 
 
 

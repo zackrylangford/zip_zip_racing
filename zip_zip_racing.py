@@ -37,15 +37,6 @@ class ZipZipRacing:
         self._create_belt()
 
 
-    def _create_belt(self):
-        """Create a belt of asteroids."""
-        # Make an asteroid.
-        asteroid = Asteroid(self)
-        self.asteroids.add(asteroid)
-
-        # Decrement amount of asteroids left in level
-        self.stats.asteroids_left -= 1
-
     def run_game(self):
         """Start the main loop for the game."""
         while True:
@@ -55,19 +46,29 @@ class ZipZipRacing:
             self._update_asteroids()
             self._update_screen()
 
+    def _create_belt(self):
+        """Create a belt of asteroids."""
+        # Make an asteroid.
+        asteroid = Asteroid(self)
+        asteroid.x = 2550
+        asteroid.rect.x = asteroid.x
+        asteroid.rect.y = randint (25,1200)
+        self.asteroids.add(asteroid)
+        self.asteroids.update()
+
     def _update_asteroids(self):
         """Update the positions of the asteroids in the belt."""
         self.asteroids.update()
-
-
         # Get rid of asteroids that go off the screen 
         for asteroid in self.asteroids.copy():
             if asteroid.rect.x <= -5:
                 self.asteroids.remove(asteroid)
         if not self.asteroids:
-            # Create a new asteroid and send it
+        # Create a new asteroid and send it
             self._create_belt()
 
+        # Decrement amount of asteroids left in level
+        self.stats.asteroids_left -= 1
 
         if pygame.sprite.spritecollideany(self.scooter, self.asteroids):
             self._scooter_hit()
@@ -89,9 +90,6 @@ class ZipZipRacing:
         # Pause
         sleep(0.5)
 
-
-
-            
      
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets"""
