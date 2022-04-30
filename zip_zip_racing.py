@@ -7,6 +7,8 @@ from settings import Settings
 
 from game_stats import GameStats
 
+from button import Button
+
 from scooter import Scooter
 
 from bullet import Bullet
@@ -39,16 +41,20 @@ class ZipZipRacing:
         self.asteroids = pygame.sprite.Group()
         self._create_belt()
         self._create_sky()
+
+        # Make the play button
+        self.play_button = Button(self, "Click here to play or press 'P'")
         
 
     def run_game(self):
         """Start the main loop for the game."""
         while True:
             self._check_events()
-            self.scooter.update()
-            self._update_stars()
-            self._update_bullets()
-            self._update_asteroids()
+            if self.stats.game_active:
+                self.scooter.update()
+                self._update_stars()
+                self._update_bullets()
+                self._update_asteroids()
             self._update_screen()
 
     def _check_events(self):
@@ -58,6 +64,36 @@ class ZipZipRacing:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        """Start a new game when the player clicks Play."""
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.stats.game_active:
+            self._start_game()
+
+
+    def _start_game(self):
+            # Reset the game statistics
+            self.stats.reset_stats()
+            self.stats.game_active = True
+
+            # Get rid of remaining asteroids, stars, and bullets.
+            self.asteroids.empty()
+            self.bullets.empty()
+            self.stars.empty()
+
+            # Create a new fleet and center the scooter.
+            self._create_sky()
+            self._create_belt()
+            self.scooter.center_scooter()
+
+            # Hide mouse cursor
+            pygame.mouse.set_visible(False)
+        
+      
 
     def _check_keydown_events(self, event):
         """Respond to keypresses."""
@@ -73,6 +109,10 @@ class ZipZipRacing:
             self._fire_bullet()
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
+        elif event.key == pygame.K_p:
+            self._start_game()
+      
+
 
     def _check_keyup_events(self,event):
         """Respond to key releases."""
@@ -176,23 +216,27 @@ class ZipZipRacing:
     def _scooter_hit(self):
         """Respond to the ship being hit by an asteroid or star."""
 
-        # Decrement scooters_left.
-        self.stats.scooters_left -= 1
+        if self.stats.scooters_left > 0:
 
-        # Get rid of any remaining asteroids and bullets.
-        self.asteroids.empty()
-        self.stars.empty()
-        self.bullets.empty()
+            # Decrement scooters_left.
+            self.stats.scooters_left -= 1
 
-        # Create a new fleet and center the ship.
-        self._create_belt()
-        self.scooter.center_scooter()
-        self._create_sky()
+            # Get rid of any remaining asteroids and bullets.
+            self.asteroids.empty()
+            self.stars.empty()
+            self.bullets.empty()
 
-        # Pause
-        sleep(0.5)
+            # Create a new fleet and center the ship.
+            self._create_belt()
+            self.scooter.center_scooter()
+            self._create_sky()
 
-     
+            # Pause
+            sleep(0.5)
+
+        else:
+            self.stats.game_active = False
+            pygame.mouse.set_visible(True)    
 
 
     def _update_screen(self):
@@ -203,6 +247,10 @@ class ZipZipRacing:
             bullet.draw_bullets()
         self.asteroids.draw(self.screen)
         self.stars.draw(self.screen)
+        # Draw the play button if the game is inactive.
+        if not self.stats.game_active:
+            self.play_button.draw_button()
+
         pygame.display.flip()
 
 if __name__ == '__main__':
