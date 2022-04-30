@@ -19,7 +19,7 @@ class Asteroid(Sprite):
 
         # Start each new asteroid at a random height, slightly off screen
         self.rect.x = 2550
-        self.rect.y = randint (10,1200)
+        self.rect.y = randint (25,1200)
 
         # Store the asteroid's exact horizontal position
         self.x = float(self.rect.x)

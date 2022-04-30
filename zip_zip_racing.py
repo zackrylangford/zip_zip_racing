@@ -69,6 +69,11 @@ class ZipZipRacing:
             if bullet.rect.x >= self.settings.screen_width:
                 self.bullets.remove(bullet)
 
+        # Check for bullets that have hit asteroids
+        # If so, get rid of the bullet and the asteroid.
+        collisions = pygame.sprite.groupcollide(
+            self.bullets, self.asteroids, True, True) 
+
 
     def _check_events(self):
         """Respond to keypresses and mouse events."""
