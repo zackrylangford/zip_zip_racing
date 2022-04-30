@@ -31,19 +31,22 @@ class ZipZipRacing:
 
         # Create an instance to store game statistics.
         self.stats = GameStats(self)
-        self.star = Star(self)
+        
 
         self.scooter = Scooter(self)
+        self.stars = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
         self._create_belt()
+        self._create_sky()
         
+
     def run_game(self):
         """Start the main loop for the game."""
         while True:
             self._check_events()
             self.scooter.update()
-            self.star.update()
+            self._update_stars()
             self._update_bullets()
             self._update_asteroids()
             self._update_screen()
@@ -130,6 +133,26 @@ class ZipZipRacing:
         self.asteroids.add(asteroid)
         self.asteroids.update()
 
+    def _update_stars(self):
+        self.stars.update()
+
+    def _create_sky(self):
+        """Create 10 stars and store them in a group"""
+        number_stars = 10
+
+        # Create stars at random intervals off the right of the screen and then send them back
+        for star_number in range(number_stars):
+            # Create the star
+                star = Star(self)
+                star.x = randint(2550,20000)
+                star.rect.x = star.x
+                star.y = randint (25,1300)
+                star.rect.y = star.y
+                self.stars.add(star)
+
+  
+
+
     def _scooter_hit(self):
         """Respond to the ship being hit by an alien."""
 
@@ -158,10 +181,10 @@ class ZipZipRacing:
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
         self.scooter.blitme()
-        self.star.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullets()
         self.asteroids.draw(self.screen)
+        self.stars.draw(self.screen)
         pygame.display.flip()
 
 if __name__ == '__main__':

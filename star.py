@@ -21,13 +21,11 @@ class Star(Sprite):
         self.rect.y = randint(50,400)
 
     def update(self):
-        self.rect.x -= 1
+        self.rect.x -= 2
         # If it goes off the left, move it back to the right.
         if self.rect.x < -500:
-            self.rect.x = 2550
+            self.rect.x = randint(2550,10000)
 
-    
-    def blitme(self):
-        """Draw the scooter at its current location."""
-        self.screen.blit(self.image, self.rect)
-
+    def draw_stars(self):
+        """Draw the stars to the screen."""
+        pygame.draw.rect(self.screen, self.color, self.rect)
