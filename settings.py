@@ -14,10 +14,11 @@ class Settings:
 
         # Scooter settings
         self.scooter_speed = 3
+        self.scooter_limit = 3
 
 
         # Bullet settings
-        self.bullet_speed = 2.5
+        self.bullet_speed = 3
         self.bullet_width = 20
         self.bullet_height = 8
         self.bullet_color = (255, 255, 255)
@@ -25,6 +26,7 @@ class Settings:
 
         # Asteroid settings
         self.asteroid_speed = 1 
+        self.amount_asteroids_level = 10 
 
 
 

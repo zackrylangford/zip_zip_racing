@@ -48,3 +48,11 @@ class Scooter:
     def blitme(self):
         """Draw the scooter at its current location."""
         self.screen.blit(self.image, self.rect)
+
+    def center_scooter(self):
+        """Center  the ship on the screen."""
+        self.rect.midleft = self.screen_rect.midleft
+        self.x = float(self.rect.x)
+
+
+

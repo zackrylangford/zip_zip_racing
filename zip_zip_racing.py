@@ -1,8 +1,11 @@
 import sys
+from time import sleep
 
 import pygame
 
 from settings import Settings
+
+from game_stats import GameStats
 
 from scooter import Scooter
 
@@ -24,6 +27,10 @@ class ZipZipRacing:
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Zip Zip Racing")
+
+        # Create an instance to store game statistics.
+        self.stats = GameStats(self)
+
         self.scooter = Scooter(self)
         self.bullets = pygame.sprite.Group()
         self.asteroids = pygame.sprite.Group()
@@ -35,6 +42,9 @@ class ZipZipRacing:
         # Make an asteroid.
         asteroid = Asteroid(self)
         self.asteroids.add(asteroid)
+
+        # Decrement amount of asteroids left in level
+        self.stats.asteroids_left -= 1
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -49,6 +59,7 @@ class ZipZipRacing:
         """Update the positions of the asteroids in the belt."""
         self.asteroids.update()
 
+
         # Get rid of asteroids that go off the screen 
         for asteroid in self.asteroids.copy():
             if asteroid.rect.x <= -5:
@@ -56,6 +67,29 @@ class ZipZipRacing:
         if not self.asteroids:
             # Create a new asteroid and send it
             self._create_belt()
+
+
+        if pygame.sprite.spritecollideany(self.scooter, self.asteroids):
+            self._scooter_hit()
+
+    def _scooter_hit(self):
+        """Respond to the ship being hit by an alien."""
+
+        # Decrement scooters_left.
+        self.stats.scooters_left -= 1
+
+        # Get rid of any remaining aliens and bullets.
+        self.asteroids.empty()
+        self.bullets.empty()
+
+        # Create a new fleet and center the ship.
+        self._create_belt()
+        self.scooter.center_scooter()
+
+        # Pause
+        sleep(0.5)
+
+
 
             
      
