@@ -45,8 +45,6 @@ class ZipZipRacing:
         # Make the play button
         self.play_button = Button(self, "Choose your level")
         self.easy_button = LevelButton(self, "Easy")
-        self.medium_button = LevelButton(self, "Medium")
-        self.hard_button = LevelButton(self, "Hard")
        
         
     def run_game(self):

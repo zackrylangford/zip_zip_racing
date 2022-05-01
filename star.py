@@ -19,10 +19,11 @@ class Star(Sprite):
 
 
     def update(self):
-        self.rect.x -= 2
+        self.rect.x -= float(self.settings.star_speed)
+
         # If it goes off the left, move it back to the right.
         if self.rect.x < -500:
-            self.rect.x = randint(2550,10000)
+            self.rect.x = randint(2550,5000)
 
     def draw_stars(self):
         """Draw the stars to the screen."""
