@@ -7,7 +7,7 @@ from settings import Settings
 
 from game_stats import GameStats
 
-from button import Button
+from button import Button, LevelButton
 
 from scooter import Scooter
 
@@ -43,9 +43,12 @@ class ZipZipRacing:
         self._create_sky()
 
         # Make the play button
-        self.play_button = Button(self, "Click here to play or press 'P'")
+        self.play_button = Button(self, "Choose your level")
+        self.easy_button = LevelButton(self, "Easy")
+        self.medium_button = LevelButton(self, "Medium")
+        self.hard_button = LevelButton(self, "Hard")
+       
         
-
     def run_game(self):
         """Start the main loop for the game."""
         while True:
@@ -72,6 +75,8 @@ class ZipZipRacing:
         """Start a new game when the player clicks Play."""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
+            # Reset the game settings. 
+            self.settings.initialize_dynamic_settings()
             self._start_game()
 
 
@@ -110,6 +115,7 @@ class ZipZipRacing:
         elif event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.key == pygame.K_p:
+            self.settings.initialize_dynamic_settings()
             self._start_game()
       
 
@@ -141,6 +147,13 @@ class ZipZipRacing:
             if bullet.rect.x >= self.settings.screen_width:
                 self.bullets.remove(bullet)
 
+        if not self.stars:
+            # Destroy existing bullets and create new sky
+            self.bullets.empty()
+            self._create_sky()
+            self._create_belt()
+            self.settings.increase_speed()
+
         # Check for bullets that have hit stars
         # if so, get rid of bullet and star
 
@@ -167,13 +180,13 @@ class ZipZipRacing:
 
     def _create_sky(self):
         """Create 10 stars and store them in a group"""
-        number_stars = 10
+        number_stars = self.settings.amount_stars_level
 
         # Create stars at random intervals off the right of the screen and then send them back
         for star_number in range(number_stars):
             # Create the star
                 star = Star(self)
-                star.x = randint(2550,20000)
+                star.x = randint(2550,15000)
                 star.rect.x = star.x
                 star.y = randint (50,1300)
                 star.rect.y = star.y
@@ -195,7 +208,7 @@ class ZipZipRacing:
     
     def _create_belt(self):
         """Create 2 asteroids and store them in a group"""
-        number_asteroids = 2
+        number_asteroids = self.settings.amount_asteroids_level
 
         # Create asteroids at random intervals off the right of the screen
         # and then send them back if they go off the left of screen
@@ -226,8 +239,7 @@ class ZipZipRacing:
             self.stars.empty()
             self.bullets.empty()
 
-            # Create a new fleet and center the ship.
-            self._create_belt()
+            # Create a new sky and center the ship.
             self.scooter.center_scooter()
             self._create_sky()
 
