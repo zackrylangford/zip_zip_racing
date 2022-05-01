@@ -7,7 +7,7 @@ from settings import Settings
 
 from game_stats import GameStats
 
-from button import Button, LevelButton
+from button import Button
 
 from scooter import Scooter
 
@@ -43,9 +43,8 @@ class ZipZipRacing:
         self._create_sky()
 
         # Make the play button
-        self.play_button = Button(self, "Choose your level")
-        self.easy_button = LevelButton(self, "Easy")
-       
+        self.play_button = Button(self, "Click to Play")
+    
         
     def run_game(self):
         """Start the main loop for the game."""

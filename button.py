@@ -2,13 +2,13 @@ import pygame.font
  
 class Button:
  
-    def __init__(self, ai_game, msg):
+    def __init__(self, zz_game, msg):
         """Initialize button attributes."""
-        self.screen = ai_game.screen
+        self.screen = zz_game.screen
         self.screen_rect = self.screen.get_rect()
         
         # Set the dimensions and properties of the button.
-        self.width, self.height = 500, 50
+        self.width, self.height = 600, 50
         self.button_color = (71, 100, 156)
         self.text_color = (246, 255, 187)
         self.font = pygame.font.SysFont(None, 48)
@@ -31,6 +31,15 @@ class Button:
         # Draw blank button and then draw message.
         self.screen.fill(self.button_color, self.rect)
         self.screen.blit(self.msg_image, self.msg_image_rect)
+
+
+        
+
+
+
+
+
+
 
 
         

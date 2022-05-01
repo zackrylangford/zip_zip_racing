@@ -18,7 +18,7 @@ class Asteroid(Sprite):
 
 
     def update(self):
-        self.rect.x -= 2
+        self.rect.x -= float(self.settings.asteroid_speed)
 
 
     def draw_stars(self):

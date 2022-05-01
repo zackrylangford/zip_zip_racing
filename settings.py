@@ -13,20 +13,43 @@ class Settings:
         self.bg_color = (38, 58, 71)
 
         # Scooter settings
-        self.scooter_speed = 3
         self.scooter_limit = 3
+        self.scooter_speed = 2
 
 
         # Bullet settings
-        self.bullet_speed = 3
         self.bullet_width = 20
-        self.bullet_height = 12
+        self.bullet_height = 20
         self.bullet_color = (255, 255, 255)
         self.bullets_allowed = 2
 
         # Asteroid settings
+        self.amount_asteroids_level = 4
+
+        # Star settings
+        self.amount_stars_level = 30
+
+
+        # How quickly the game speeds up.
+        self.speedup_scale = 1.1
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self):
+        """Initialize settings that change throughout the game."""
+        self.bullet_speed = 3
         self.asteroid_speed = 1.1
-        self.amount_asteroids_level = 10 
+        self.star_speed = 1
+
+    def increase_speed(self):
+        """Increase speed settings."""
+        self.bullet_speed *= self.speedup_scale
+        self.asteroid_speed *= self.speedup_scale
+        self.star_speed *= self.speedup_scale
+
+
+
+
+
 
 
 
