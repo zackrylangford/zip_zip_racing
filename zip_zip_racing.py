@@ -7,6 +7,8 @@ from settings import Settings
 
 from game_stats import GameStats
 
+from scoreboard import Scoreboard
+
 from button import Button
 
 from scooter import Scooter
@@ -31,9 +33,10 @@ class ZipZipRacing:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Zip Zip Racing")
 
-        # Create an instance to store game statistics.
+        # Create an instance to store game statistics,
+        # and create a scoreboard.
         self.stats = GameStats(self)
-        
+        self.sb = Scoreboard(self)
 
         self.scooter = Scooter(self)
         self.stars = pygame.sprite.Group()
@@ -81,6 +84,7 @@ class ZipZipRacing:
             # Reset the game statistics
             self.stats.reset_stats()
             self.stats.game_active = True
+            self.sb.prep_score()
 
             # Get rid of remaining asteroids, stars, and bullets.
             self.asteroids.empty()
@@ -144,12 +148,11 @@ class ZipZipRacing:
             if bullet.rect.x >= self.settings.screen_width:
                 self.bullets.remove(bullet)
 
-        if not self.stars:
-            # Destroy existing bullets and create new sky
-            self.bullets.empty()
-            self._create_sky()
-            self._create_belt()
-            self.settings.increase_speed()
+        self._check_bullet_star_collisions()
+        self._check_bullet_asteroid_collisions()
+
+    def _check_bullet_star_collisions(self):
+        """Respond to bullet-alien collisions."""
 
         # Check for bullets that have hit stars
         # if so, get rid of bullet and star
@@ -157,11 +160,27 @@ class ZipZipRacing:
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.stars, True, True
         )
+        if collisions:
+            for stars in collisions.values():
+                self.stats.score += self.settings.star_points *len(stars)
+            self.sb.prep_score()
+
+        if not self.stars:
+            # Destroy existing bullets and create new sky
+            self.bullets.empty()
+            self._create_sky()
+            self._create_belt()
+            self.settings.increase_speed()
+    
+    def _check_bullet_asteroid_collisions(self):
 
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.asteroids, True, True
         )
-
+        if collisions:
+            for asteroids in collisions.values():
+                self.stats.score += self.settings.asteroid_points *len(asteroids)
+            self.sb.prep_score()
 
 
 
@@ -256,6 +275,10 @@ class ZipZipRacing:
             bullet.draw_bullets()
         self.asteroids.draw(self.screen)
         self.stars.draw(self.screen)
+
+        # Draw the score information.
+        self.sb.show_score()
+
         # Draw the play button if the game is inactive.
         if not self.stats.game_active:
             self.play_button.draw_button()

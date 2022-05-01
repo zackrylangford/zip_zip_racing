@@ -40,6 +40,10 @@ class Settings:
         self.asteroid_speed = 1.1
         self.star_speed = 1
 
+        # Scoring
+        self.star_points = 50 
+        self.asteroid_points = 200
+
     def increase_speed(self):
         """Increase speed settings."""
         self.bullet_speed *= self.speedup_scale

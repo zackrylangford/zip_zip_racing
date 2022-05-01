@@ -13,5 +13,6 @@ class GameStats:
         """Initialize statistics that can change during the game."""
         self.scooters_left = self.settings.scooter_limit
         self.asteroids_left = self.settings.amount_asteroids_level
+        self.score = 0 
 
         
