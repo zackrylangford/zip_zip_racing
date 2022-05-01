@@ -34,6 +34,10 @@ class Settings:
         self.speedup_scale = 1.1
         self.initialize_dynamic_settings()
 
+        # How quickly the point values increase
+        self.score_scale = 1.5
+        
+
     def initialize_dynamic_settings(self):
         """Initialize settings that change throughout the game."""
         self.bullet_speed = 3
@@ -45,10 +49,14 @@ class Settings:
         self.asteroid_points = 200
 
     def increase_speed(self):
-        """Increase speed settings."""
+        """Increase speed settings and point values."""
         self.bullet_speed *= self.speedup_scale
         self.asteroid_speed *= self.speedup_scale
         self.star_speed *= self.speedup_scale
+        self.star_points = int(self.star_points * self.score_scale)
+        self.asteroid_points = int(self.asteroid_points * self.score_scale)
+
+        
 
 
 
