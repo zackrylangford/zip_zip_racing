@@ -1,6 +1,5 @@
 from random import randint
 
-
 class Settings:
     """A class to store settings for Zack's game."""
 

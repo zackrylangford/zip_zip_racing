@@ -1,3 +1,6 @@
+
+
+
 class GameStats:
     """Track statistics for zip zip racing."""
 
@@ -5,6 +8,9 @@ class GameStats:
         """Initialize statistics."""
         self.settings = zz_game.settings
         self.reset_stats()
+        
+        # High score should never be reset.
+        self.high_score = 0
 
         # Start game in an inactive state
         self.game_active = False

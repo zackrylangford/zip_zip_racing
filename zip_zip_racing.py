@@ -164,6 +164,7 @@ class ZipZipRacing:
             for stars in collisions.values():
                 self.stats.score += self.settings.star_points *len(stars)
             self.sb.prep_score()
+            self.sb.check_high_score()
 
         if not self.stars:
             # Destroy existing bullets and create new sky
@@ -181,6 +182,7 @@ class ZipZipRacing:
             for asteroids in collisions.values():
                 self.stats.score += self.settings.asteroid_points *len(asteroids)
             self.sb.prep_score()
+            self.sb.check_high_score()
 
 
 
@@ -204,7 +206,7 @@ class ZipZipRacing:
                 star = Star(self)
                 star.x = randint(2550,15000)
                 star.rect.x = star.x
-                star.y = randint (50,1300)
+                star.y = randint (50,1250)
                 star.rect.y = star.y
                 self.stars.add(star)
 
