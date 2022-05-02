@@ -85,6 +85,8 @@ class ZipZipRacing:
             self.stats.reset_stats()
             self.stats.game_active = True
             self.sb.prep_score()
+            self.sb.prep_level()
+            self.sb.prep_scooters()
 
             # Get rid of remaining asteroids, stars, and bullets.
             self.asteroids.empty()
@@ -172,6 +174,10 @@ class ZipZipRacing:
             self._create_sky()
             self._create_belt()
             self.settings.increase_speed()
+
+            # Increase level. 
+            self.stats.level += 1
+            self.sb.prep_level()
     
     def _check_bullet_asteroid_collisions(self):
 
@@ -206,7 +212,7 @@ class ZipZipRacing:
                 star = Star(self)
                 star.x = randint(2550,15000)
                 star.rect.x = star.x
-                star.y = randint (50,1250)
+                star.y = randint (200,1250)
                 star.rect.y = star.y
                 self.stars.add(star)
 
@@ -235,7 +241,7 @@ class ZipZipRacing:
                 asteroid = Asteroid(self)
                 asteroid.x = randint(2550,20000)
                 asteroid.rect.x = asteroid.x
-                asteroid.y = randint (50,1300)
+                asteroid.y = randint (200,1300)
                 asteroid.rect.y = asteroid.y
                 self.asteroids.add(asteroid)
  
@@ -249,8 +255,9 @@ class ZipZipRacing:
 
         if self.stats.scooters_left > 0:
 
-            # Decrement scooters_left.
+            # Decrement scooters_left and update scoreboard.
             self.stats.scooters_left -= 1
+            self.sb.prep_scooters()
 
             # Get rid of any remaining asteroids and bullets.
             self.asteroids.empty()

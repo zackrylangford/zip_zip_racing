@@ -1,10 +1,13 @@
 import pygame
+from pygame.sprite import Sprite
+
  
-class Scooter:
+class Scooter(Sprite):
     """A class to manage the ship."""
  
     def __init__(self, zz_game):
         """Initialize the scooter and set its starting position."""
+        super().__init__()
         self.screen = zz_game.screen
         self.settings = zz_game.settings
         self.screen_rect = zz_game.screen.get_rect()
@@ -35,7 +38,7 @@ class Scooter:
             self.x += self.settings.scooter_speed
         if self.moving_left and self.rect.left > 0:
             self.x -= self.settings.scooter_speed
-        if self.moving_up and self.rect.top > 0:
+        if self.moving_up and self.rect.top > 200:
             self.y -= self.settings.scooter_speed
         if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
             self.y += self.settings.scooter_speed

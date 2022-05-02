@@ -20,5 +20,7 @@ class GameStats:
         self.scooters_left = self.settings.scooter_limit
         self.asteroids_left = self.settings.amount_asteroids_level
         self.score = 0 
+        self.level = 1
+        
 
         
